@@ -33,5 +33,4 @@ jobs:
         key: ${{ secrets.EC2_SSH_KEY }}
         port: 22
         script: |
-          unzip -o ~/model.zip -d ~/app
-          cd ~/app
+          unzip -o ~/model.zip -d ~/
