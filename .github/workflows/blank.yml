@@ -15,8 +15,8 @@ jobs:
     - name: Archive project
       run: zip -r model.zip . -x "*.git*" "__pycache__/*"
 
-    - name: Deploy to EC2 via SSH
-      uses: appleboy/ssh-action@v0.1.8
+    - name: Copy archive to EC2
+      uses: appleboy/scp-action@v0.1.7
       with:
         host: ${{ secrets.EC2_HOST }}
         username: ${{ secrets.EC2_USER }}
@@ -24,4 +24,14 @@ jobs:
         port: 22
         source: "model.zip"
         target: "~/"
-          
+
+    - name: Deploy on EC2
+      uses: appleboy/ssh-action@v0.1.8
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USER }}
+        key: ${{ secrets.EC2_SSH_KEY }}
+        port: 22
+        script: |
+          unzip -o ~/model.zip -d ~/app
+          cd ~/app
